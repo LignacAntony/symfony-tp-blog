@@ -1,0 +1,22 @@
+{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+    <div class="space-y-4">
+        <div>
+            {{ form_label(form.name, 'Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        </div>
+        <div>
+            {{ form_label(form.slug, 'Slug', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+            {{ form_widget(form.slug, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        </div>
+        <div>
+            {{ form_label(form.articles, 'Articles', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+            {{ form_widget(form.articles, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', 'size': '10'}}) }}
+            <p class="mt-2 text-sm text-gray-500">Hold Ctrl (Windows) or Cmd (Mac) to select multiple articles.</p>
+        </div>
+    </div>
+    <div class="mt-6">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+            {{ button_label|default('Save') }}
+        </button>
+    </div>
+{{ form_end(form) }}
