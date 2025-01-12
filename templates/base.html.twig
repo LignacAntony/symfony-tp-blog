@@ -16,14 +16,14 @@
         {% include 'components/left_side_bar.html.twig' %}
         <main class="flex-1 overflow-y-auto p-8">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold">Blog d'Anto</h1>
+                <h1 class="text-3xl font-bold">Anto Blog</h1>
                 <button class="block md:hidden rounded-lg focus:outline-none focus:shadow-outline">
                     <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
                         <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                     </svg>
                 </button>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-white rounded-lg shadow-md">
                 {% block body %}{% endblock %}
             </div>
         </main>
