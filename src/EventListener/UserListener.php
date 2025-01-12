@@ -19,5 +19,11 @@ class UserListener
     public function prePersist(User $user): void
     {
         $user->setCreatedDateAt(new \DateTimeImmutable());
+
+        $roles = $user->getRoles();
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+            $user->setRoles($roles);
+        }
     }
 }

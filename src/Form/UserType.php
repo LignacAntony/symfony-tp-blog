@@ -20,11 +20,8 @@ class UserType extends AbstractType
                     'Administrateur' => 'ROLE_ADMIN',
                     'Bannis' => 'ROLE_BANNED'
                 ],
-                'multiple' => false,
+                'multiple' => true,
                 'expanded' => true,
-                'data' => 'ROLE_USER',
-                'required' => true,
-                'mapped' => false,
             ])
             ->add('password')
             ->add('username')

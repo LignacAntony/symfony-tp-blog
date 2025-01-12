@@ -44,6 +44,7 @@ class AppFixtures extends Fixture
             $user->setUsername(username: "user_{$i}");
             $user->setPassword(password: 'password');
             $user->setRoles(['ROLE_USER']);
+            $user->setVerified(true);
             $users[] = $user;
             $manager->persist(object: $user);
         }
@@ -53,6 +54,7 @@ class AppFixtures extends Fixture
         $admin->setUsername(username: "admin");
         $admin->setPassword('password');
         $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setVerified(true);
         $users[] = $admin;
         $manager->persist($admin);
 
@@ -61,6 +63,7 @@ class AppFixtures extends Fixture
         $normal->setUsername(username: "anto");
         $normal->setPassword('password');
         $normal->setRoles(['ROLE_USER']);
+        $normal->setVerified(true);
         $users[] = $normal;
         $manager->persist($normal);
 
@@ -69,6 +72,7 @@ class AppFixtures extends Fixture
         $banned->setUsername(username: "hitler");
         $banned->setPassword('password');
         $banned->setRoles(['ROLE_BANNED']);
+        $banned->setVerified(true);
         $users[] = $banned;
         $manager->persist($banned);
     }
@@ -76,11 +80,11 @@ class AppFixtures extends Fixture
     protected function createLanguages(ObjectManager $manager, array &$languages): void
     {
         $array = [
-            ['code' => 'fr', 'label' => 'Français'],
-            ['code' => 'en', 'label' => 'Anglais'],
-            ['code' => 'es', 'label' => 'Espagnol'],
-            ['code' => 'de', 'label' => 'Allemand'],
-            ['code' => 'it', 'label' => 'Italien'],
+            ['code' => 'fr', 'label' => 'French'],
+            ['code' => 'en', 'label' => 'English'],
+            ['code' => 'es', 'label' => 'Spanish'],
+            ['code' => 'de', 'label' => 'German'],
+            ['code' => 'it', 'label' => 'Italian'],
         ];
 
         foreach ($array as $element) {
@@ -95,10 +99,10 @@ class AppFixtures extends Fixture
     protected function createCategories(ObjectManager $manager, array &$categories): void
     {
         $array = [
-            ['slug' => 'travel', 'name' => 'Voyage'],
+            ['slug' => 'travel', 'name' => 'Travel'],
             ['slug' => 'sport', 'name' => 'Sport'],
-            ['slug' => 'politics', 'name' => 'Politique'],
-            ['slug' => 'economy', 'name' => 'Economie'],
+            ['slug' => 'politics', 'name' => 'Politics'],
+            ['slug' => 'economy', 'name' => 'Economy'],
             ['slug' => 'culture', 'name' => 'Culture'],
         ];
 
@@ -115,39 +119,39 @@ class AppFixtures extends Fixture
     {
         $array = [
             [
-                'title' => 'Voyage en Inde',
+                'title' => 'Travel to India',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-inde',
+                'slug' => 'travel-to-india',
                 'published' => true,
             ],
             [
-                'title' => 'Voyage en Chine',
+                'title' => 'Travel to China',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-chine',
+                'slug' => 'travel-to-china',
                 'published' => true,
             ],
             [
-                'title' => 'Voyage en Russie',
+                'title' => 'Travel to Russia',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-russie',
+                'slug' => 'travel-to-russia',
                 'published' => true,
             ],
             [
-                'title' => 'Voyage en France',
+                'title' => 'Travel to France',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-france',
+                'slug' => 'travel-to-france',
                 'published' => true,
             ],
             [
-                'title' => 'Voyage en Italie',
+                'title' => 'Travel to Italy',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-italie',
+                'slug' => 'travel-to-italy',
                 'published' => true,
             ],
             [
-                'title' => 'Voyage en Espagne',
+                'title' => 'Travel to Spain',
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
-                'slug' => 'voyage-en-espagne',
+                'slug' => 'travel-to-spain',
                 'published' => false,
             ]
         ];
@@ -169,13 +173,34 @@ class AppFixtures extends Fixture
     {
         $contents = [
             [
-                'content' => 'Super article',
+                'content' => 'Great article, very informative!',
             ],
             [
-                'content' => 'Moyen',
+                'content' => 'Quite average, could be better.',
             ],
             [
-                'content' => 'Nul',
+                'content' => 'Not good, lacks depth.',
+            ],
+            [
+                'content' => 'Excellent read, highly recommend!',
+            ],
+            [
+                'content' => 'Interesting perspective, well written.',
+            ],
+            [
+                'content' => 'Disappointing, expected more details.',
+            ],
+            [
+                'content' => 'Fantastic insights, learned a lot!',
+            ],
+            [
+                'content' => 'Mediocre content, not engaging.',
+            ],
+            [
+                'content' => 'Very well researched and presented.',
+            ],
+            [
+                'content' => 'Poorly written, needs improvement.',
             ],
         ];
 

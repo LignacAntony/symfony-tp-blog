@@ -1,23 +1,60 @@
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 text-white overflow-y-auto">
-            <nav class="p-4">
-                <a href="{{path('homepage')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    Accueil
+<aside class="w-64 bg-gray-800 text-white flex flex-col">
+    <div class="p-4 border-b border-gray-700">
+        {% if app.user %}
+            <p class="text-sm font-medium">Hello, {{ app.user.username }}</p>
+        {% else %}
+            <p class="text-sm font-medium">Welcome, you must be logged in to access the content!</p>
+        {% endif %}
+    </div>
+    <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{path('homepage')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('homepage')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                Home
+            </a>
+            <span class="block py-2.5 px-2 rounded bg-gray-900 text-slate-400 text-sm">
+                Categories
+            </span>
+            {% for category in get_all_categories() %}
+                <a href="{{ path('app_articles_by_category', {'slug': category.slug}) }}" class="block py-2.5 px-4 rounded transition duration-200 {% if app.request.get('slug') == category.slug %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                    {{ category.name }}
                 </a>
-                <a href="{{path('app_user_index')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    User
-                </a>
-                <a href="{{path('app_language_index')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    Language
-                </a>
-                <a href="{{path('app_category_index')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    Category
-                </a>
-                <a href="{{path('app_article_index')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    Article
-                </a>
-                <a href="{{path('app_review_index')}}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
-                    Review
-                </a>
-            </nav>
-        </aside>
+            {% endfor %}
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <span class="block py-2.5 px-2 rounded bg-gray-900 text-slate-400 text-sm">
+                Admin
+            </span>
+            <a href="{{path('app_user_index')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('app_user_index')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                User
+            </a>
+            <a href="{{path('app_language_index')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('app_language_index')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                Language
+            </a>
+            <a href="{{path('app_category_index')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('app_category_index')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                Category
+            </a>
+            <a href="{{path('app_article_index')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('app_article_index')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                Article
+            </a>
+            <a href="{{path('app_review_index')}}" class="block py-2.5 px-4 rounded transition duration-200 {% if (app.request.pathInfo == path('app_review_index')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                Review
+            </a>
+        {% endif %}
+    </nav>
+    <div class="mt-auto p-4 border-t border-gray-700">
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_profile') }}" class="block py-2.5 px-4 text-center rounded transition duration-200 mb-2 {% if (app.request.pathInfo == path('app_profile')) %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                My Profile
+            </a>
+        {% endif %}
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="block w-full py-2 px-4 rounded text-center bg-red-600 hover:bg-red-700 transition duration-200">
+                Logout
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="block w-full py-2 px-4 rounded text-center bg-blue-600 hover:bg-blue-700 transition duration-200">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</aside>
