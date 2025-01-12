@@ -33,4 +33,30 @@ class ArticleRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findByFilters(?string $search = null, ?int $languageId = null, ?string $categorySlug = null)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->where('a.published = :published')
+            ->setParameter('published', true)
+            ->orderBy('a.createdDateAt', 'DESC');
+
+        if ($categorySlug) {
+            $qb->join('a.categories', 'c')
+                ->andWhere('c.slug = :categorySlug')
+                ->setParameter('categorySlug', $categorySlug);
+        }
+
+        if ($search) {
+            $qb->andWhere('LOWER(a.title) LIKE LOWER(:search)')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($languageId) {
+            $qb->andWhere('a.language = :languageId')
+                ->setParameter('languageId', $languageId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

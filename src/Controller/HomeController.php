@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Review;
+use App\Form\ArticleFilterType;
 use App\Form\ReviewArticleType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
@@ -19,27 +20,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function __invoke(Request $request, ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+    public function __invoke(Request $request, ArticleRepository $articleRepository): Response
     {
 
-        $search = $request->query->get('search', '');
+        $filterForm = $this->createForm(ArticleFilterType::class);
+        $filterForm->handleRequest($request);
 
-        if ($search) {
-            $articles = $articleRepository->createQueryBuilder('a')
-                ->where('LOWER(a.title) LIKE LOWER(:search)')
-                ->andWhere('a.published = :published')
-                ->setParameter('search', '%' . $search . '%')
-                ->setParameter('published', true)
-                ->orderBy('a.createdDateAt', 'DESC')
-                ->getQuery()
-                ->getResult();
-        } else {
-            $articles = $articleRepository->findBy(['published' => true], ['createdDateAt' => 'DESC']);
-        }
+        $search = $request->query->get('search', '');
+        $languageId = $filterForm->get('language')->getData() ? $filterForm->get('language')->getData()->getId() : null;
+
+        $articles = $articleRepository->findByFilters($search, $languageId);
 
         return $this->render('articles.html.twig', [
             'articles' => $articles,
-            'categories' => $categoryRepository->findAll(),
+            'filterForm' => $filterForm->createView(),
         ]);
     }
 
@@ -73,20 +67,27 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/categories/{slug}', name: 'app_articles_by_category')]
-    public function listByCategory(Request $request, string $slug, ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+    #[Route('/categories/{categorySlug}', name: 'app_articles_by_category')]
+    public function listByCategory(Request $request, string $categorySlug, ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
-        $category = $categoryRepository->findOneBy(['slug' => $slug]);
-        $search = $request->query->get('search', '');
-
+        $category = $categoryRepository->findOneBy(['slug' => $categorySlug]);
         if (!$category) {
             throw $this->createNotFoundException('The category does not exist');
         }
 
+        $filterForm = $this->createForm(ArticleFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $search = $request->query->get('search', '');
+        $languageId = $filterForm->get('language')->getData() ? $filterForm->get('language')->getData()->getId() : null;
+
+        $articles = $articleRepository->findByFilters($search, $languageId, $categorySlug);
+
         return $this->render('list.html.twig', [
             'category' => $category,
             'categories' => $categoryRepository->findAll(),
-            'articles' => $articleRepository->findByCategorySlug($slug, $search),
+            'articles' => $articles,
+            'filterForm' => $filterForm->createView(),
         ]);
     }
 }

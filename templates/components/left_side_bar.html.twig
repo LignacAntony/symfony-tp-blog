@@ -15,7 +15,7 @@
                 Categories
             </span>
             {% for category in get_all_categories() %}
-                <a href="{{ path('app_articles_by_category', {'slug': category.slug}) }}" class="block py-2.5 px-4 rounded transition duration-200 {% if app.request.get('slug') == category.slug %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
+                <a href="{{ path('app_articles_by_category', {'categorySlug': category.slug}) }}" class="block py-2.5 px-4 rounded transition duration-200 {% if app.request.get('slug') == category.slug %}bg-gray-700 text-white{% else %}hover:bg-gray-700 hover:text-white{% endif %}">
                     {{ category.name }}
                 </a>
             {% endfor %}
