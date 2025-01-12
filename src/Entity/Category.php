@@ -24,7 +24,7 @@ class Category
     /**
      * @var Collection<int, Article>
      */
-    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'categories')]
     private Collection $articles;
 
     public function __construct()
@@ -73,6 +73,7 @@ class Category
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
+            $article->addCategory($this);
         }
 
         return $this;
@@ -80,7 +81,9 @@ class Category
 
     public function removeArticle(Article $article): static
     {
-        $this->articles->removeElement($article);
+        if ($this->articles->removeElement($article)) {
+            $article->removeCategory($this);
+        }
 
         return $this;
     }

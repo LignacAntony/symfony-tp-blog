@@ -17,6 +17,19 @@
                 <span class="font-semibold">Auteur:</span> {{ article.author.username }}
             </div>
         </div>
+        <div class="mb-4">
+            {% if article.categories|length > 0 %}
+                <div class="flex flex-wrap gap-2">
+                    {% for category in article.categories %}
+                        <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">
+                            {{ category.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <span class="text-gray-500 text-sm">No categories</span>
+            {% endif %}
+        </div>
         <div class="prose max-w-none">
             {{ article.content|raw }}
         </div>

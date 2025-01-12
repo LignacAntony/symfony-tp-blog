@@ -2,6 +2,19 @@
     <div class="p-6">
         <h2 class="text-2xl font-semibold mb-2">{{ article.title }}</h2>
         <p class="text-gray-600 mb-4">{{ article.content|slice(0, 100) }}...</p>
+        <div class="mb-4">
+            {% if article.categories|length > 0 %}
+                <div class="flex flex-wrap gap-2">
+                    {% for category in article.categories %}
+                        <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">
+                            {{ category.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <span class="text-gray-500 text-sm">No categories</span>
+            {% endif %}
+        </div>
         <div class="flex justify-between items-center">
             <span class="text-sm text-gray-500">{{ article.createdDateAt|date('Y-m-d') }}</span>
             <a href="{{ path('app_articles_index', {'slug': article.slug}) }}" class="text-blue-500 hover:text-blue-700">Lire plus</a>

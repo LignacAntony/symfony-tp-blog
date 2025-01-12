@@ -30,7 +30,6 @@ class AppFixtures extends Fixture
         $this->createArticles($manager, $articles, $users, $languages);
         $this->createReviews($manager, $reviews, $users, $articles);
 
-        // $this->linkLanguagesToArticles($languages, $articles);
         $this->linkArticlesToCategories($articles, $categories);
 
         $manager->flush();
@@ -153,6 +152,36 @@ class AppFixtures extends Fixture
                 'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies. Nullam nec nisl nec nunc ultricies ultricies.',
                 'slug' => 'travel-to-spain',
                 'published' => false,
+            ],
+            [
+                'title' => 'The Future of Technology',
+                'content' => 'Exploring the advancements and future trends in technology.',
+                'slug' => 'future-of-technology',
+                'published' => true,
+            ],
+            [
+                'title' => 'The Impact of Sports on Society',
+                'content' => 'Analyzing how sports influence various aspects of society.',
+                'slug' => 'impact-of-sports',
+                'published' => true,
+            ],
+            [
+                'title' => 'Economic Trends in 2023',
+                'content' => 'A comprehensive look at the economic trends and predictions for 2023.',
+                'slug' => 'economic-trends-2023',
+                'published' => true,
+            ],
+            [
+                'title' => 'Cultural Heritage and Preservation',
+                'content' => 'Discussing the importance of preserving cultural heritage.',
+                'slug' => 'cultural-heritage-preservation',
+                'published' => true,
+            ],
+            [
+                'title' => 'Political Landscape in Modern Times',
+                'content' => 'Examining the current political landscape and its implications.',
+                'slug' => 'political-landscape-modern-times',
+                'published' => true,
             ]
         ];
 
@@ -214,15 +243,6 @@ class AppFixtures extends Fixture
                 $manager->persist($review);
                 $reviews[] = $review;
             }
-        }
-    }
-
-    protected function linkLanguagesToArticles(array $languages, array $articles): void
-    {
-        /** @var Article $article */
-        foreach ($articles as $article) {
-            $randomLanguage = $languages[array_rand($languages)];
-            $article->setLanguage($randomLanguage);
         }
     }
 

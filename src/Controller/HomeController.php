@@ -64,7 +64,7 @@ class HomeController extends AbstractController
 
             $this->addFlash('success', 'Your review was successfully added.');
 
-            return $this->redirectToRoute('app_article_index', ['slug' => $article->getSlug()]);
+            return $this->redirectToRoute('app_articles_index', ['slug' => $article->getSlug()]);
         }
 
         return $this->render('article.html.twig', [
