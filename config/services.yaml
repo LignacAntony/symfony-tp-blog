@@ -19,3 +19,7 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Service\OpenAiService:
+        arguments:
+            $apiKey: '%env(OPENAI_API_KEY)%'

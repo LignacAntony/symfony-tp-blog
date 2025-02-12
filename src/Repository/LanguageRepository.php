@@ -15,4 +15,9 @@ class LanguageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Language::class);
     }
+
+    public function findByCode(string $code): ?Language
+    {
+        return $this->findOneBy(['code' => $code]);
+    }
 }
