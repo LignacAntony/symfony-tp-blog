@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% block stylesheets %}
     {% endblock %}
-        {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body class="h-full overflow-hidden">

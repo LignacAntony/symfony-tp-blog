@@ -11,11 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Service\OpenAiService;
 
 #[Route('/review')]
 #[IsGranted('ROLE_ADMIN')]
 final class ReviewController extends AbstractController
 {
+    public function __construct(
+        private OpenAiService $openAiService
+    ) {}
+
     #[Route(name: 'app_review_index', methods: ['GET'])]
     public function index(ReviewRepository $reviewRepository): Response
     {
@@ -79,5 +84,29 @@ final class ReviewController extends AbstractController
         }
 
         return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/check-content', name: 'app_review_check_content', methods: ['POST'])]
+    public function checkContent(Request $request, Review $review, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('check-content' . $review->getId(), $request->getPayload()->getString('_token'))) {
+            try {
+                $isAppropriate = $this->openAiService->validateReviewContent($review->getContent());
+                
+                if (!$isAppropriate) {
+                    $author = $review->getAuthor();
+                    $author->setRoles(['ROLE_BANNED']);
+                    $entityManager->flush();
+                    
+                    $this->addFlash('success', 'L\'utilisateur a été banni pour avoir publié un commentaire inapproprié.');
+                } else {
+                    $this->addFlash('success', 'Le contenu du commentaire est approprié.');
+                }
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la vérification : ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirectToRoute('app_review_show', ['id' => $review->getId()], Response::HTTP_SEE_OTHER);
     }
 }

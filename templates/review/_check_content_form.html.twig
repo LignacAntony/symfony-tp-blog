@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_review_check_content', {'id': review.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir vérifier ce contenu ? L\'utilisateur pourrait être banni si le contenu est inapproprié.');">
+    <input type="hidden" name="_token" value="{{ csrf_token('check-content' ~ review.id) }}">
+    <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+        Vérifier le contenu
+    </button>
+</form> 

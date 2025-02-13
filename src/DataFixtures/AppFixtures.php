@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
         $this->createUsers($manager, $users);
         $this->createLanguages($manager, $languages);
         $this->createCategories($manager, $categories);
-        $this->createArticles($manager, $articles, $users, $languages);
+        $this->createArticles($manager, $articles, $users, $languages, $categories);
         $this->createReviews($manager, $reviews, $users, $articles);
 
         $this->linkArticlesToCategories($articles, $categories);
@@ -114,7 +114,7 @@ class AppFixtures extends Fixture
         }
     }
 
-    protected function createArticles(ObjectManager $manager, array &$articles, array $authors, array $languages): void
+    protected function createArticles(ObjectManager $manager, array &$articles, array $authors, array $languages, array $categories): void
     {
         $array = [
             [
@@ -182,7 +182,23 @@ class AppFixtures extends Fixture
                 'content' => 'Examining the current political landscape and its implications.',
                 'slug' => 'political-landscape-modern-times',
                 'published' => true,
-            ]
+            ],
+            [
+                'title' => 'Découvrez l\'histoire et la magie du Stade Santiago Bernabeu à Madrid',
+                'content' => 'Le Stade Santiago Bernabeu est l\'un des lieux emblématiques du football mondial, situé à Madrid, en Espagne. Construit en 1947, ce stade est le domicile du célèbre club de football du Real Madrid. Avec une capacité de plus de 81 000 places, le Santiago Bernabeu est non seulement un lieu de compétition sportive, mais aussi un symbole de passion et de tradition pour les fans de football du monde entier.L\'histoire du stade remonte à ses débuts modestes, mais au fil des décennies, il est devenu un véritable temple du football. Le nom du stade rend hommage à l\'une des figures les plus emblématiques de l\'histoire du Real Madrid, Santiago Bernabeu, qui a été président du club pendant de nombreuses années.Lorsque vous visitez le Stade Santiago Bernabeu, vous avez l\'occasion de découvrir l\'histoire riche et prestigieuse du Real Madrid à travers des visites guidées qui vous emmènent dans les coulisses du stade, des vestiaires aux tribunes en passant par le tunnel des joueurs. Vous pouvez également visiter le musée du Real Madrid, qui abrite des trophées, des maillots historiques et d\'autres objets qui retracent l\'histoire glorieuse du club.En plus d\'être le théâtre de matchs de football légendaires, le Santiago Bernabeu est également un lieu de concerts, d\'événements spéciaux et de célébrations. Sa renommée dépasse largement le monde du football, en faisant un lieu incontournable à visiter pour tous les passionnés de sport et de culture.Que vous soyez un fan de football ou simplement un amateur de lieux chargés d\'histoire, le Stade Santiago Bernabeu vous promet une expérience inoubliable. Plongez dans l\'univers fascinant du Real Madrid et du football espagnol en visitant ce joyau architectural et sportif au cœur de Madrid.',
+                'slug' => 'decouvrez-l-histoire-et-la-magie-du-stade-santiago-bernabeu-madrid',
+                'published' => true,
+                'language' => 'fr',
+                'category' => ['Sport', 'Culture']
+            ],
+            [
+                'title' => 'Survivre et prospérer dans l\'univers impitoyable de Rust',
+                'content' => 'Rust est un jeu de survie en ligne impitoyable qui met à l\'épreuve vos compétences en matière de stratégie, de construction et de combat. Plongez dans un monde ouvert hostile où la coopération est essentielle pour survivre, mais où la trahison et le danger guettent à chaque coin de rue. Dans Rust, vous commencez nu et affamé, avec pour seul objectif de survivre aux éléments, aux animaux sauvages et aux autres joueurs. Construisez des abris, explorez des terres sauvages, fabriquez des armes et formez des alliances pour vous assurer une longévité dans ce monde brutal. Mais méfiez-vous, car dans Rust, la confiance peut être une arme à double tranchant. Les raids, les vols et les escarmouches sont monnaie courante, et seuls les plus rusés et les plus habiles survivront. Avec des graphismes époustouflants, une mécanique de jeu immersive et une communauté passionnée, Rust offre une expérience de jeu unique et palpitante pour les amateurs de survie en ligne. Prêt à relever le défi et à conquérir ce monde brutal ? Alors préparez-vous à plonger dans l\'univers impitoyable de Rust, où seuls les plus forts et les plus rusés survivront.',
+                'slug' => 'survivre-et-prosperer-dans-l-univers-impitoyable-de-rust',
+                'published' => true,
+                'language' => 'fr',
+                'category' => ['Culture']
+            ],
         ];
 
         foreach ($array as $element) {
@@ -192,7 +208,18 @@ class AppFixtures extends Fixture
             $article->setSlug($element['slug']);
             $article->setAuthor($authors[array_rand($authors)]);
             $article->setPublished($element['published']);
-            $article->setLanguage($languages[array_rand($languages)]);
+            if (isset($element['language'])) {
+                $languageEntity = $languages[array_search($element['language'], array_column($languages, 'code'))];
+                $article->setLanguage($languageEntity);
+            } else {
+                $article->setLanguage($languages[array_rand($languages)]);
+            }
+            if (isset($element['category'])) {
+                foreach ($element['category'] as $category) {
+                    $categoryEntity = $categories[array_search($category, array_column($categories, 'name'))];
+                    $article->addCategory($categoryEntity);
+                }
+            }
             $manager->persist($article);
             $articles[] = $article;
         }
